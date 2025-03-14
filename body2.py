@@ -1,4 +1,4 @@
-# Body2 represents the body directely orbiting the center in our the case the Sun resp Earth
+# Body2 represents the body directely orbiting the center in our the case the Earth resp Moon
 
 import math
 
