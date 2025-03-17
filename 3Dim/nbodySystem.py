@@ -1,6 +1,8 @@
 
 from Bodies import Body
 import numpy as np 
+import euler
+
 
 class System:
     def __init__(self, Bodies, G = 6.67430 * 10**(-11), name = 'Some System'):
@@ -42,9 +44,11 @@ class System:
 
 
 
+if  __name__ == '__main__': 
 
-Test1 = Body(500, np.array([0,1,2]), np.array([4,5,6]), name = 'Body 1')
-Test2 = Body(500, np.array([1,0,0]), np.array([4,5,6]))
-Test3 = Body(500, np.array([0,0]), np.array([4,5,6]))
-system = System([Test1,Test2,Test3])
-print(system.forceMat())
+    Test1 = Body(500, np.array([0,1,2]), np.array([4,5,6]), name = 'Body 1')
+    Test2 = Body(500, np.array([1,0,0]), np.array([4,5,6]))
+    Test3 = Body(500, np.array([0,0,1]), np.array([4,5,6]))
+    system = System([Test1,Test2,Test3])
+    sol  = euler.Euler( 1, system )
+    sol.simulate(10)
