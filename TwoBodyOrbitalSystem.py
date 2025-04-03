@@ -25,6 +25,8 @@ class Two_Body_Sys:
         a_E_2 = -v[1] * earth_const
         return [v[2], v[3] , a_Sc_1 + a_E_1 , a_Sc_2 + a_E_2 ]
 
+
+    # the current version of the below function doesn't work.
     def velocity_estimate(self,t,v_1,v_2):
         d_1= math.sqrt(v_1[0]**2 + v_1[1]**2)
         d_2= math.sqrt(v_2[0]**2 + v_2[1]**2)
