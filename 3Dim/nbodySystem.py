@@ -1,7 +1,11 @@
-
+# python nbodySystem.py
 from Bodies import Body
 import numpy as np 
 import euler
+
+# used for creating the visualization
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 
 class System:
@@ -37,7 +41,7 @@ class System:
                     q = q
                 else:
                     q_1 =   np.subtract(self.Bodies[i].q,self.Bodies[j].q)
-                    coeff = self.Bodies[i].m * self.Bodies[j].m / np.linalg.norm(q_1)**3
+                    coeff = (-1)*self.Bodies[i].m * self.Bodies[j].m / np.linalg.norm(q_1)**3
                     q = np.add(q,coeff*q_1)
             Mat[i,:] = q*self.G
         return Mat 
@@ -46,9 +50,38 @@ class System:
 
 if  __name__ == '__main__': 
 
-    Test1 = Body(500, np.array([0,1,2]), np.array([4,5,6]), name = 'Body 1')
-    Test2 = Body(500, np.array([1,0,0]), np.array([4,5,6]))
-    Test3 = Body(500, np.array([0,0,1]), np.array([4,5,6]))
+    Test1 = Body(5000000000000, np.array([0,0,0]), np.array([0,0,0.1]), name = 'Body 1')
+    Test2 = Body(1000, np.array([37,40,35]), np.array([0,0.5,0]))
+    Test3 = Body(1000, np.array([-25,-15,-48]), np.array([-0.5,0,0]))
     system = System([Test1,Test2,Test3])
-    sol  = euler.Euler( 1, system )
-    sol.simulate(10)
+    sol  = euler.Euler( 10, system )
+    num_steps = 60
+    traj = sol.simulate(num_steps)
+    print(traj)
+
+
+    def update_lines(num, traj, lines):
+        for line, walk in zip(lines, traj):
+            line.set_data_3d(walk[:num, :].T)
+        return lines
+
+
+    # Attaching 3D axis to the figure
+    fig = plt.figure()
+    ax = fig.add_subplot(projection="3d")
+
+    # Create lines initially without data
+    lines = [ax.plot([], [], [])[0] for _ in traj]
+
+    # Setting the Axes properties
+    ax.set(xlim3d=(-200, 200), xlabel='X')
+    ax.set(ylim3d=(-200, 200), ylabel='Y')
+    ax.set(zlim3d=(-200, 200), zlabel='Z')
+
+    # Creating the Animation object
+    ani = animation.FuncAnimation(
+    fig, update_lines, num_steps, fargs=(traj, lines), interval=100)
+
+    plt.show()
+
+   
